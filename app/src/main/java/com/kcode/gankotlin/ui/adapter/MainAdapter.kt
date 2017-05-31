@@ -9,6 +9,9 @@ import java.util.*
  * Created by caik on 2017/5/31.
  */
 class MainAdapter(var data:List<Fragment> = ArrayList(),fm:FragmentManager) : FragmentStatePagerAdapter(fm) {
+
+    val titles = arrayOf("最新","Android","iOS","前端","福利")
+
     override fun getItem(position: Int): Fragment {
         return data[position]
     }
@@ -18,6 +21,6 @@ class MainAdapter(var data:List<Fragment> = ArrayList(),fm:FragmentManager) : Fr
     }
 
     override fun getPageTitle(position: Int): CharSequence {
-        return data[position].javaClass.simpleName
+        return titles[position]
     }
 }
