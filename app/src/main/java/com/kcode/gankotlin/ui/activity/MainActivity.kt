@@ -1,8 +1,10 @@
-package com.kcode.gankotlin
+package com.kcode.gankotlin.ui.activity
 
 import android.os.Bundle
+import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
+import com.kcode.gankotlin.R
 import com.kcode.gankotlin.ui.adapter.MainAdapter
 import com.kcode.gankotlin.ui.fragment.*
 import kotlinx.android.synthetic.main.activity_main.*
@@ -13,9 +15,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        setSupportActionBar(toolbar)
-        supportActionBar!!.setTitle(R.string.app_name)
-
         val fragments = ArrayList<Fragment>()
 
         fragments.add(NewFragment())
@@ -24,9 +23,21 @@ class MainActivity : AppCompatActivity() {
         fragments.add(WebFragment())
         fragments.add(WelfareFragment())
 
-        viewPager.adapter = MainAdapter(fragments,supportFragmentManager)
+        viewPager.adapter = MainAdapter(fragments, supportFragmentManager)
+        viewPager.offscreenPageLimit = 5
 
         tabLayout.setupWithViewPager(viewPager)
+        tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+            }
+
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                viewPager.setCurrentItem(tab!!.position,false)
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+            }
+        })
 
     }
 }
