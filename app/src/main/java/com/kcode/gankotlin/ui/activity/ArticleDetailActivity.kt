@@ -1,8 +1,11 @@
 package com.kcode.gankotlin.ui.activity
 
+import android.net.http.SslError
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
+import android.webkit.SslErrorHandler
+import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import com.kcode.gankotlin.R
@@ -48,6 +51,9 @@ class ArticleDetailActivity : AppCompatActivity() {
 
         webView.settings.javaScriptEnabled = true
         webView.setWebViewClient(MyWebViewClient())
+        webView.setWebChromeClient(object : WebChromeClient() {
+
+        })
         webView.loadUrl(url)
     }
 
@@ -55,6 +61,10 @@ class ArticleDetailActivity : AppCompatActivity() {
         override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
             view!!.loadUrl(url)
             return true
+        }
+
+        override fun onReceivedSslError(view: WebView?, handler: SslErrorHandler?, error: SslError?) {
+            handler!!.proceed()
         }
     }
 }
