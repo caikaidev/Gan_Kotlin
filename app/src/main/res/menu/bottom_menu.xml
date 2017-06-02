@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/action_recommend"
+          android:title="@string/recommend"
+          android:icon="@drawable/hot" />
+    <item android:id="@+id/action_history"
+          android:title="@string/history"
+          android:icon="@drawable/hot" />
+    <item android:id="@+id/action_girl"
+          android:title="@string/girl"
+          android:icon="@drawable/hot" />
+    <item android:id="@+id/action_video"
+          android:title="@string/video"
+          android:icon="@drawable/hot" />
+
+</menu>

@@ -1,43 +1,126 @@
 package com.kcode.gankotlin.ui.activity
 
 import android.os.Bundle
-import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import com.kcode.gankotlin.R
-import com.kcode.gankotlin.ui.adapter.MainAdapter
-import com.kcode.gankotlin.ui.fragment.*
+import com.kcode.gankotlin.ui.fragment.ArticleContainerFragment
+import com.kcode.gankotlin.ui.fragment.HistoryFragment
+import com.kcode.gankotlin.ui.fragment.VideoFragment
+import com.kcode.gankotlin.ui.fragment.WelfareFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
+
+    var lastIndex = -1
+    var lastFragment:Fragment? = null
+    var articleContainerFragment:ArticleContainerFragment? = null
+    var historyFragment:HistoryFragment? = null
+    var girlFragment:WelfareFragment? = null
+    var videoFragment:VideoFragment? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val fragments = ArrayList<Fragment>()
+        navigation.setOnNavigationItemSelectedListener { p0 ->
+            when (p0.itemId) {
+                R.id.action_recommend -> {
+                    changeTab(0)
+                }
+                R.id.action_history -> {
+                    changeTab(1)
+                }
+                R.id.action_girl -> {
+                    changeTab(2)
+                }
+                R.id.action_video -> {
+                    changeTab(3)
+                }
+                else -> {
 
-        fragments.add(NewFragment())
-        fragments.add(AndroidFragment())
-        fragments.add(IOSFragment())
-        fragments.add(WebFragment())
-        fragments.add(WelfareFragment())
-
-        viewPager.adapter = MainAdapter(fragments, supportFragmentManager)
-        viewPager.offscreenPageLimit = 5
-
-        tabLayout.setupWithViewPager(viewPager)
-        tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabReselected(tab: TabLayout.Tab?) {
+                }
             }
 
-            override fun onTabSelected(tab: TabLayout.Tab?) {
-                viewPager.setCurrentItem(tab!!.position,false)
-            }
+            true
+        }
 
-            override fun onTabUnselected(tab: TabLayout.Tab?) {
+        //set default fragment
+        changeTab(0)
+
+    }
+
+    fun changeTab(position: Int) {
+
+        if (lastIndex == position ) {
+            return
+        }
+
+        lastIndex = position
+
+        val fragmentManager = supportFragmentManager
+        val fragmentTransaction = fragmentManager.beginTransaction()
+
+        if (lastFragment != null) {
+            fragmentTransaction.hide(lastFragment)
+        }
+
+        when (position) {
+            0 -> {
+
+                articleContainerFragment = fragmentManager.findFragmentByTag(ArticleContainerFragment::class.java.simpleName) as ArticleContainerFragment?
+
+                if (articleContainerFragment == null) {
+                    articleContainerFragment = ArticleContainerFragment.newInstance()
+                    fragmentTransaction.add(R.id.container,articleContainerFragment,ArticleContainerFragment::class.java.simpleName)
+                }else{
+                    fragmentTransaction.show(articleContainerFragment)
+                }
+
+                lastFragment = articleContainerFragment
             }
-        })
+            1 -> {
+                historyFragment = fragmentManager.findFragmentByTag(HistoryFragment::class.java.simpleName) as HistoryFragment?
+
+                if (historyFragment == null) {
+                    historyFragment = HistoryFragment.newInstance()
+                    fragmentTransaction.add(R.id.container,historyFragment,HistoryFragment::class.java.simpleName)
+                }else{
+                    fragmentTransaction.show(historyFragment)
+                }
+
+                lastFragment = historyFragment
+            }
+            2 -> {
+                girlFragment = fragmentManager.findFragmentByTag(WelfareFragment::class.java.simpleName) as WelfareFragment?
+
+                if (girlFragment == null) {
+                    girlFragment = WelfareFragment.newInstance()
+                    fragmentTransaction.add(R.id.container,girlFragment,WelfareFragment::class.java.simpleName)
+                }else{
+                    fragmentTransaction.show(girlFragment)
+                }
+
+                lastFragment = girlFragment
+            }
+            3 -> {
+                videoFragment = fragmentManager.findFragmentByTag(VideoFragment::class.java.simpleName) as VideoFragment?
+
+                if (videoFragment == null) {
+                    videoFragment = VideoFragment.newInstance()
+                    fragmentTransaction.add(R.id.container,videoFragment,VideoFragment::class.java.simpleName)
+                }else{
+                    fragmentTransaction.show(videoFragment)
+                }
+
+                lastFragment = videoFragment
+            }
+        }
+
+        fragmentTransaction.commit()
+    }
+
+    fun showFragment(fragment:Fragment) {
 
     }
 }

@@ -1,4 +1,12 @@
 <resources>
     <string name="app_name">干货集中营</string>
     <string name="load_failed">数据下载失败</string>
+    <string name="recommend">推荐</string>
+    <string name="history">往期</string>
+    <string name="girl">妹子</string>
+    <string name="video">视频</string>
+
+    <string name="girl_title">妹纸福利</string>
+    <string name="history_title">往期推荐</string>
+    <string name="video_title">休息视频</string>
 </resources>

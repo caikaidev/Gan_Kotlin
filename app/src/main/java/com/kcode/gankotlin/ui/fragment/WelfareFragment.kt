@@ -1,7 +1,10 @@
 package com.kcode.gankotlin.ui.fragment
 
 import android.content.Context
+import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
+import android.support.v7.widget.SimpleItemAnimator
+import android.view.View
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseQuickAdapter
@@ -18,8 +21,22 @@ class WelfareFragment : BaseFragment(){
 
     var adapter: GirlAdapter? = null
 
+    companion object{
+        fun newInstance():WelfareFragment{
+            return WelfareFragment()
+        }
+    }
+
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        toolbar.visibility = View.VISIBLE
+    }
+
     override fun initRecyclerView() {
         recyclerView.layoutManager = GridLayoutManager(activity, 2)
+        var simpleAnimator: SimpleItemAnimator = recyclerView.itemAnimator as SimpleItemAnimator
+        simpleAnimator.supportsChangeAnimations = false
+
         adapter = GirlAdapter(activity!!.applicationContext,R.layout.item_girl)
         recyclerView.adapter = adapter
 

@@ -23,6 +23,9 @@ interface Api {
                       @Path("month") month: String,
                       @Path("day") day: String)
 
+    @GET("day/history")
+    fun getPublishedDate()
+
 
     companion object Factory{
         fun create():Api {
