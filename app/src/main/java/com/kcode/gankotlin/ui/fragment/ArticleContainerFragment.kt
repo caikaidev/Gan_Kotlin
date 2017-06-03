@@ -2,6 +2,7 @@ package com.kcode.gankotlin.ui.fragment
 
 import android.os.Bundle
 import android.support.design.widget.TabLayout
+import android.support.design.widget.TabLayout.MODE_SCROLLABLE
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -34,11 +35,14 @@ class ArticleContainerFragment :Fragment(){
         fragments.add(AndroidFragment())
         fragments.add(IOSFragment())
         fragments.add(WebFragment())
+        fragments.add(VideoFragment())
+        fragments.add(ExpandFragment())
 
         viewPager.adapter = MainAdapter(fragments, childFragmentManager)
-        viewPager.offscreenPageLimit = 4
+        viewPager.offscreenPageLimit = 6
 
         tabLayout.setupWithViewPager(viewPager)
+        tabLayout.tabMode = MODE_SCROLLABLE
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabReselected(tab: TabLayout.Tab?) {
             }

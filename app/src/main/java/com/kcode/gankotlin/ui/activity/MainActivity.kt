@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity
 import com.kcode.gankotlin.R
 import com.kcode.gankotlin.ui.fragment.ArticleContainerFragment
 import com.kcode.gankotlin.ui.fragment.HistoryFragment
-import com.kcode.gankotlin.ui.fragment.VideoFragment
 import com.kcode.gankotlin.ui.fragment.WelfareFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -17,7 +16,6 @@ class MainActivity : AppCompatActivity() {
     var articleContainerFragment:ArticleContainerFragment? = null
     var historyFragment:HistoryFragment? = null
     var girlFragment:WelfareFragment? = null
-    var videoFragment:VideoFragment? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,14 +26,11 @@ class MainActivity : AppCompatActivity() {
                 R.id.action_recommend -> {
                     changeTab(0)
                 }
-                R.id.action_history -> {
+                R.id.action_girl -> {
                     changeTab(1)
                 }
-                R.id.action_girl -> {
+                R.id.action_history -> {
                     changeTab(2)
-                }
-                R.id.action_video -> {
-                    changeTab(3)
                 }
                 else -> {
 
@@ -80,18 +75,6 @@ class MainActivity : AppCompatActivity() {
                 lastFragment = articleContainerFragment
             }
             1 -> {
-                historyFragment = fragmentManager.findFragmentByTag(HistoryFragment::class.java.simpleName) as HistoryFragment?
-
-                if (historyFragment == null) {
-                    historyFragment = HistoryFragment.newInstance()
-                    fragmentTransaction.add(R.id.container,historyFragment,HistoryFragment::class.java.simpleName)
-                }else{
-                    fragmentTransaction.show(historyFragment)
-                }
-
-                lastFragment = historyFragment
-            }
-            2 -> {
                 girlFragment = fragmentManager.findFragmentByTag(WelfareFragment::class.java.simpleName) as WelfareFragment?
 
                 if (girlFragment == null) {
@@ -103,24 +86,22 @@ class MainActivity : AppCompatActivity() {
 
                 lastFragment = girlFragment
             }
-            3 -> {
-                videoFragment = fragmentManager.findFragmentByTag(VideoFragment::class.java.simpleName) as VideoFragment?
+            2 -> {
 
-                if (videoFragment == null) {
-                    videoFragment = VideoFragment.newInstance()
-                    fragmentTransaction.add(R.id.container,videoFragment,VideoFragment::class.java.simpleName)
+                historyFragment = fragmentManager.findFragmentByTag(HistoryFragment::class.java.simpleName) as HistoryFragment?
+
+                if (historyFragment == null) {
+                    historyFragment = HistoryFragment.newInstance()
+                    fragmentTransaction.add(R.id.container,historyFragment,HistoryFragment::class.java.simpleName)
                 }else{
-                    fragmentTransaction.show(videoFragment)
+                    fragmentTransaction.show(historyFragment)
                 }
 
-                lastFragment = videoFragment
+                lastFragment = historyFragment
+
             }
         }
 
         fragmentTransaction.commit()
-    }
-
-    fun showFragment(fragment:Fragment) {
-
     }
 }

@@ -50,6 +50,7 @@ class ArticleDetailActivity : AppCompatActivity() {
 
 
         webView.settings.javaScriptEnabled = true
+        webView.settings.useWideViewPort = true
         webView.setWebViewClient(MyWebViewClient())
         webView.setWebChromeClient(object : WebChromeClient() {
 

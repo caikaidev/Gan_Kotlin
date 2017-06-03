@@ -1,5 +1,6 @@
 package com.kcode.gankotlin.net
 
+import com.kcode.gankotlin.repository.PublishedDate
 import com.kcode.gankotlin.repository.Result
 import io.reactivex.Observable
 import retrofit2.Retrofit
@@ -24,7 +25,7 @@ interface Api {
                       @Path("day") day: String)
 
     @GET("day/history")
-    fun getPublishedDate()
+    fun getPublishedDate():Observable<PublishedDate>
 
 
     companion object Factory{
