@@ -38,11 +38,13 @@ class ArticleContainerFragment :Fragment(){
         fragments.add(VideoFragment.newInstance())
         fragments.add(ExpandFragment.newInstance())
 
-        viewPager.adapter = MainAdapter(fragments, childFragmentManager)
+        val titles = resources.getStringArray(R.array.title)
+        viewPager.adapter = MainAdapter(fragments, titles,childFragmentManager)
         viewPager.offscreenPageLimit = 6
 
         tabLayout.setupWithViewPager(viewPager)
         tabLayout.tabMode = MODE_SCROLLABLE
+
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabReselected(tab: TabLayout.Tab?) {
             }

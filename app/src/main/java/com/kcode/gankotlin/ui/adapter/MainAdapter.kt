@@ -8,9 +8,7 @@ import java.util.*
 /**
  * Created by caik on 2017/5/31.
  */
-class MainAdapter(var data:List<Fragment> = ArrayList(),fm:FragmentManager) : FragmentStatePagerAdapter(fm) {
-
-    val titles = arrayOf("今日推荐","安卓","iOS","前端","休息视频","拓展资源")
+class MainAdapter(var data:List<Fragment> = ArrayList(), var titles :Array<String>,fm:FragmentManager) : FragmentStatePagerAdapter(fm) {
 
     override fun getItem(position: Int): Fragment {
         return data[position]

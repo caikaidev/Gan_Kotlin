@@ -18,12 +18,12 @@ import kotlinx.android.synthetic.main.fragment_base.*
 /**
  * Created by caik on 2017/5/31.
  */
-class WelfareFragment : BaseFragment(){
+class WelfareFragment : BaseFragment() {
 
     var adapter: GirlAdapter? = null
 
-    companion object{
-        fun newInstance():WelfareFragment{
+    companion object {
+        fun newInstance(): WelfareFragment {
             return WelfareFragment()
         }
     }
@@ -34,18 +34,26 @@ class WelfareFragment : BaseFragment(){
     }
 
     override fun initRecyclerView() {
-        recyclerView.layoutManager = StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL)
+        recyclerView.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         var simpleAnimator: SimpleItemAnimator = recyclerView.itemAnimator as SimpleItemAnimator
         simpleAnimator.supportsChangeAnimations = false
 
-        adapter = GirlAdapter(activity!!.applicationContext,R.layout.item_girl)
+        adapter = GirlAdapter(activity!!.applicationContext, R.layout.item_girl)
+        adapter!!.onItemClickListener = BaseQuickAdapter.OnItemClickListener {
+            adapter, view, position -> start2PhotoActivity(adapter.getItem(position) as Article)
+        }
+
         recyclerView.adapter = adapter
 
         adapter!!.setOnLoadMoreListener({
             pageNumber++
             isRefresh = false
-            loadData(pageSize,pageNumber)
-        },recyclerView)
+            loadData(pageSize, pageNumber)
+        }, recyclerView)
+    }
+
+    private fun start2PhotoActivity(article: Article) {
+
     }
 
     override fun loadError() {
@@ -61,7 +69,7 @@ class WelfareFragment : BaseFragment(){
     private fun setUp(data: List<Article>) {
         if (isRefresh) {
             adapter!!.setNewData(data)
-        }else{
+        } else {
             adapter!!.addData(data)
         }
     }
@@ -78,7 +86,7 @@ class WelfareFragment : BaseFragment(){
         return Type.福利.name
     }
 
-    class GirlAdapter(var context: Context,layoutId:Int): BaseQuickAdapter<Article, BaseViewHolder>(layoutId){
+    class GirlAdapter(var context: Context, layoutId: Int) : BaseQuickAdapter<Article, BaseViewHolder>(layoutId) {
 
         override fun convert(viewHolder: BaseViewHolder?, article: Article?) {
             val imageView = viewHolder!!.getView<ImageView>(R.id.image)

@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
+import com.chad.library.adapter.base.BaseQuickAdapter
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.kcode.gankotlin.R
@@ -113,13 +114,13 @@ class RecommendFragment : Fragment() {
         recyclerView.isNestedScrollingEnabled = false
         recyclerView.adapter = adapter
 
-        adapter.setOnItemClickListener({ adapter, view, postion ->
-            start2Detail(adapter.getItem(postion) as Article)
-        })
+        adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener {
+            adapter, view, position -> start2Detail(adapter.getItem(position) as Article)
+        }
 
     }
 
-    fun start2Detail(article :Article) {
+    fun start2Detail(article: Article) {
         val intent = Intent(activity, ArticleDetailActivity::class.java)
         intent.putExtra("desc", article.desc)
         intent.putExtra("url", article.url)

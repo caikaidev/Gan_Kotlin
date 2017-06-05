@@ -32,10 +32,6 @@ class MainActivity : AppCompatActivity() {
                 R.id.action_history -> {
                     changeTab(2)
                 }
-                else -> {
-
-                }
-
             }
 
             true
