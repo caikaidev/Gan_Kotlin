@@ -2,14 +2,15 @@ package com.kcode.gankotlin.ui.fragment
 
 import android.content.Context
 import android.os.Bundle
-import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.SimpleItemAnimator
+import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.View
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.kcode.gankotlin.R
+import com.kcode.gankotlin.common.Type
 import com.kcode.gankotlin.repository.Article
 import com.kcode.gankotlin.utils.toast
 import kotlinx.android.synthetic.main.fragment_base.*
@@ -33,7 +34,7 @@ class WelfareFragment : BaseFragment(){
     }
 
     override fun initRecyclerView() {
-        recyclerView.layoutManager = GridLayoutManager(activity, 2)
+        recyclerView.layoutManager = StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL)
         var simpleAnimator: SimpleItemAnimator = recyclerView.itemAnimator as SimpleItemAnimator
         simpleAnimator.supportsChangeAnimations = false
 
@@ -48,7 +49,7 @@ class WelfareFragment : BaseFragment(){
     }
 
     override fun loadError() {
-        if (activity == null) {
+        if (activity != null) {
             activity!!.toast(R.string.load_failed)
         }
     }
@@ -74,7 +75,7 @@ class WelfareFragment : BaseFragment(){
     }
 
     override fun getType(): String {
-        return "福利"
+        return Type.福利.name
     }
 
     class GirlAdapter(var context: Context,layoutId:Int): BaseQuickAdapter<Article, BaseViewHolder>(layoutId){

@@ -21,8 +21,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        navigation.setOnNavigationItemSelectedListener { p0 ->
-            when (p0.itemId) {
+        navigation.setOnNavigationItemSelectedListener { item ->
+            when (item.itemId) {
                 R.id.action_recommend -> {
                     changeTab(0)
                 }
@@ -35,6 +35,7 @@ class MainActivity : AppCompatActivity() {
                 else -> {
 
                 }
+
             }
 
             true

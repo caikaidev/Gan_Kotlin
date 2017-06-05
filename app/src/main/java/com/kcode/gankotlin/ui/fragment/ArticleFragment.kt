@@ -34,7 +34,7 @@ open abstract class ArticleFragment : BaseFragment(){
     }
 
     override fun loadError() {
-        if (activity == null) {
+        if (activity != null) {
             activity!!.toast(R.string.load_failed)
         }
     }

@@ -1,30 +1,32 @@
 package com.kcode.gankotlin.ui.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.util.Log
+import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.chad.library.adapter.base.BaseQuickAdapter
+import com.chad.library.adapter.base.BaseViewHolder
 import com.kcode.gankotlin.R
 import com.kcode.gankotlin.net.Api
-import com.kcode.gankotlin.repository.PublishedDate
+import com.kcode.gankotlin.repository.History
+import com.kcode.gankotlin.ui.activity.HistoryDetailActivity
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import java.text.SimpleDateFormat
-import java.util.*
+import kotlinx.android.synthetic.main.fragment_history.*
+import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
+import org.jsoup.select.Elements
 
 /**
  * Created by caik on 2017/6/2.
  */
 class HistoryFragment : Fragment() {
 
-    val TAG = HistoryFragment::class.java.simpleName
-    val DATE_LINE = 30
-    val dates:MutableList<com.kcode.gankotlin.repository.Date> = arrayListOf()
-
-    companion object{
-        fun newInstance():HistoryFragment{
+    companion object {
+        fun newInstance(): HistoryFragment {
             return HistoryFragment()
         }
     }
@@ -35,49 +37,58 @@ class HistoryFragment : Fragment() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initRecyclerView()
         loadPublishedDate()
+    }
+
+    fun initRecyclerView() {
+        recyclerView.layoutManager = LinearLayoutManager(activity)
     }
 
     fun loadPublishedDate() {
         val api = Api.Factory.create()
-        api.getPublishedDate()
+        api.getHistory()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({
-                    result -> parsePublishedDateResult(result)
+                    result ->
+                    setUpRecyclerView(parseHtml(result.string()))
                 })
     }
 
-    private fun parsePublishedDateResult(result: PublishedDate?) {
-        Log.d(TAG,result.toString())
-        if (result!!.error) {
-            return
+    private fun parseHtml(html: String): List<History> {
+        val doc: Document = Jsoup.parse(html)
+        val typo: Elements = doc.getElementsByClass("typo")
+        var data: MutableList<History> = arrayListOf()
+
+        var history:History
+
+        typo.select("a").listIterator().forEach {
+            history = History(it.attr("href").substring(1),it.text())
+            data.add(history)
         }
-
-        result!!.results.filter {
-
-            //只展示近一个月内的历史推荐
-            val calendar:Calendar = Calendar.getInstance()
-            val day = calendar.get(Calendar.DAY_OF_MONTH)
-            calendar.set(Calendar.DAY_OF_MONTH,day - DATE_LINE)
-
-            val time = calendar.time.time
-            val _time = formatDate(it)!!.time
-
-            _time > time
-        }.forEach {
-            Log.d(TAG,it)
-            val _temp = it.split("-")
-            val date = com.kcode.gankotlin.repository.Date(_temp[0],_temp[1],_temp[2])
-            this.dates.add(date)
-        }
-
-
+        return data
     }
 
-    fun formatDate(str:String):Date? {
-        val FORMAT = "yyyy-MM-dd"
-        val simpleFormat:SimpleDateFormat = SimpleDateFormat(FORMAT)
-        return simpleFormat.parse(str)
+    fun setUpRecyclerView(data: List<History>) {
+        val adapter: HistoryAdapter = HistoryAdapter(R.layout.item_history, data)
+        adapter.setOnItemClickListener({ adapter, view, position ->
+            val history:History = adapter.getItem(position) as History
+            start2HistoryDetail(history.date)
+        })
+        recyclerView.adapter = adapter
     }
+
+    private fun start2HistoryDetail(date: String) {
+        val intent:Intent = Intent(activity,HistoryDetailActivity::class.java)
+        intent.putExtra("date", date)
+        activity.startActivity(intent)
+    }
+
+    class HistoryAdapter(layoutId: Int, data: List<History>) : BaseQuickAdapter<History, BaseViewHolder>(layoutId, data) {
+        override fun convert(p0: BaseViewHolder?, p1: History?) {
+            p0!!.setText(R.id.content,"${p1!!.content}(${p1!!.date})")
+        }
+    }
+
 }

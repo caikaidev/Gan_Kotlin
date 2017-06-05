@@ -31,12 +31,12 @@ class ArticleContainerFragment :Fragment(){
 
         val fragments = ArrayList<Fragment>()
 
-        fragments.add(NewFragment())
-        fragments.add(AndroidFragment())
-        fragments.add(IOSFragment())
-        fragments.add(WebFragment())
-        fragments.add(VideoFragment())
-        fragments.add(ExpandFragment())
+        fragments.add(RecommendFragment.newInstance())
+        fragments.add(AndroidFragment.newInstance())
+        fragments.add(IOSFragment.newInstance())
+        fragments.add(WebFragment.newInstance())
+        fragments.add(VideoFragment.newInstance())
+        fragments.add(ExpandFragment.newInstance())
 
         viewPager.adapter = MainAdapter(fragments, childFragmentManager)
         viewPager.offscreenPageLimit = 6

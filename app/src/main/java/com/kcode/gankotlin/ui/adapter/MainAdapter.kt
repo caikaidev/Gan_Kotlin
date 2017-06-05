@@ -10,7 +10,7 @@ import java.util.*
  */
 class MainAdapter(var data:List<Fragment> = ArrayList(),fm:FragmentManager) : FragmentStatePagerAdapter(fm) {
 
-    val titles = arrayOf("最新","安卓","iOS","前端","休息视频","拓展资源")
+    val titles = arrayOf("今日推荐","安卓","iOS","前端","休息视频","拓展资源")
 
     override fun getItem(position: Int): Fragment {
         return data[position]
