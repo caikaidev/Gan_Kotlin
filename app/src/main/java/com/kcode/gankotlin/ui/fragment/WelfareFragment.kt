@@ -1,6 +1,7 @@
 package com.kcode.gankotlin.ui.fragment
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.SimpleItemAnimator
 import android.support.v7.widget.StaggeredGridLayoutManager
@@ -12,6 +13,7 @@ import com.chad.library.adapter.base.BaseViewHolder
 import com.kcode.gankotlin.R
 import com.kcode.gankotlin.common.Type
 import com.kcode.gankotlin.repository.Article
+import com.kcode.gankotlin.ui.activity.PhotoActivity
 import com.kcode.gankotlin.utils.toast
 import kotlinx.android.synthetic.main.fragment_base.*
 
@@ -53,7 +55,9 @@ class WelfareFragment : BaseFragment() {
     }
 
     private fun start2PhotoActivity(article: Article) {
-
+        val intent = Intent(activity, PhotoActivity::class.java)
+        intent.putExtra("url", article.url)
+        activity!!.startActivity(intent)
     }
 
     override fun loadError() {

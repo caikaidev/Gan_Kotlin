@@ -4,12 +4,21 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
-    <include layout="@layout/common_toolbar"/>
+    <include
+        layout="@layout/common_toolbar"/>
 
-    <com.github.chrisbanes.photoview.PhotoView
-        android:id="@+id/photoView"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"/>
+        android:layout_height="match_parent">
+
+        <com.github.chrisbanes.photoview.PhotoView
+            android:id="@+id/photoView"
+            android:layout_width="match_parent"
+            android:layout_centerInParent="true"
+            android:layout_height="wrap_content"/>
+
+    </RelativeLayout>
+
+
 
 </LinearLayout>

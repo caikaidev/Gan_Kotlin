@@ -22,8 +22,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_recommend.*
 import org.json.JSONObject
-import java.text.SimpleDateFormat
-import java.util.*
 
 /**
  * Created by caik on 2017/6/5.
@@ -31,10 +29,6 @@ import java.util.*
 class RecommendFragment : Fragment() {
 
     companion object {
-
-        fun newInstance(): RecommendFragment {
-            return newInstance("")
-        }
 
         fun newInstance(date: String): RecommendFragment {
             val fragment: RecommendFragment = RecommendFragment()
@@ -51,8 +45,7 @@ class RecommendFragment : Fragment() {
     var imageUrl: String? = null
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val currentDate = getCurrentDate()
-        date = arguments.getString("date", currentDate)
+        date = arguments.getString("date")
         return inflater!!.inflate(R.layout.fragment_recommend, container, false)
     }
 
@@ -104,7 +97,7 @@ class RecommendFragment : Fragment() {
         return data
     }
 
-    fun setUpView(data: List<Article>): Unit {
+    fun setUpView(data: List<Article>){
         Glide.with(activity)
                 .load(imageUrl!!)
                 .into(welFare)
@@ -127,8 +120,4 @@ class RecommendFragment : Fragment() {
         startActivity(intent)
     }
 
-    fun getCurrentDate(): String {
-        val sdf: SimpleDateFormat = SimpleDateFormat("yyyy/MM/dd")
-        return sdf.format(Date())
-    }
 }

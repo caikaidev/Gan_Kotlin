@@ -21,6 +21,7 @@
 
         <activity android:name=".ui.activity.ArticleDetailActivity"/>
         <activity android:name=".ui.activity.HistoryDetailActivity"/>
+        <activity android:name=".ui.activity.PhotoActivity"/>
     </application>
 
 </manifest>

@@ -20,9 +20,9 @@ class ArticleAdapter(var context: Context,layoutId:Int) : BaseQuickAdapter<Artic
 
     override fun convert(viewHolder: BaseViewHolder?, article: Article?) {
         viewHolder!!.setText(R.id.title,article!!.desc)
-        viewHolder!!.setText(R.id.who,article!!.who)
-        viewHolder!!.setText(R.id.type,article!!.type)
-        viewHolder!!.setText(R.id.publishedAt,DateUtils.getRelativeTimeSpanString(sdf.parse(article!!.publishedAt).time))
+        viewHolder.setText(R.id.who,article!!.who)
+        viewHolder.setText(R.id.type,article!!.type)
+        viewHolder.setText(R.id.publishedAt,DateUtils.getRelativeTimeSpanString(sdf.parse(article!!.publishedAt).time))
 
         val image: ImageView = viewHolder.getView(R.id.image)
 

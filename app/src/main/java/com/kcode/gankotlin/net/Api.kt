@@ -1,5 +1,6 @@
 package com.kcode.gankotlin.net
 
+import com.kcode.gankotlin.repository.PublishedDate
 import com.kcode.gankotlin.repository.Result
 import io.reactivex.Observable
 import okhttp3.OkHttpClient
@@ -33,6 +34,9 @@ interface Api {
 
     @GET("history")
     fun getHistory():Observable<ResponseBody>
+
+    @GET("api/day/history")
+    fun getPublishedDate():Observable<PublishedDate>
 
 
     companion object Factory{
