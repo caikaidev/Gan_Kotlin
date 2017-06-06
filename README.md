@@ -5,7 +5,9 @@
 
 ### 下载
 
-[fir](https://fir.im/y2jp)
+[fir](https://fir.im/y2jp)    
+
+[![alt text](https://ws3.sinaimg.cn/large/006tNc79gy1fgbjh5ie3rj304901ajr6.jpg"title")](https://play.google.com/store/apps/details?id=com.kcode.gankotlin)
 
 ### 截图
 
