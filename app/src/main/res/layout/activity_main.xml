@@ -20,8 +20,8 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:translationZ="6dp"
+        android:background="@drawable/bottom_bg"
         android:layout_gravity="start"
-        android:background="@drawable/shape_bottom_bg"
         app:menu="@menu/bottom_menu" />
 
 </LinearLayout>
