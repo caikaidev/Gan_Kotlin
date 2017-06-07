@@ -7,7 +7,7 @@
 
 [fir](https://fir.im/y2jp)    
 
-[![alt text](https://ws3.sinaimg.cn/large/006tNc79gy1fgbjh5ie3rj304901ajr6.jpg"title")](https://play.google.com/store/apps/details?id=com.kcode.gankotlin)
+<img src="/screenshot/googleplay.jpg" width="23" height="76" href="https://play.google.com/store/apps/details?id=com.kcode.gankotlin"/>
 
 ### 截图
 
