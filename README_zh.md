@@ -1,16 +1,16 @@
 # Gan_Kotlin
-Gank.io Android Client build with kotlin
+### 描述
 
-[中文文档](https://github.com/fccaikai/Gan_Kotlin/blob/master/README_zh.md)
+使用kotlin编写的Gank客户端。遵循MD设计规范。
 
-### Download
+### 下载
 
 [fir](https://fir.im/y2jp)    
 
 <a href='https://play.google.com/store/apps/details?id=com.kcode.gankotlin'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' height="80px"/></a> 
 
 
-### Screenshots
+### 截图
 
 ![](https://ws2.sinaimg.cn/large/006tNbRwgy1fgbd141pxdj30rx0nqae8.jpg)
 
@@ -20,11 +20,11 @@ Gank.io Android Client build with kotlin
 
   
 
-### API
+### 数据来源
 
-[gank.io](http://gank.io)
+[干货集中营](http://gank.io)
 
-### Library
+### 依赖库
 
 [retrofit](https://github.com/square/retrofit)
 
@@ -44,11 +44,11 @@ Gank.io Android Client build with kotlin
 
 - [ ] Realm   
 
-### Author
+### 作者
 
-Blog：[jianshu](http://www.jianshu.com/u/629c1b27e187)
+简书：[个人主页](http://www.jianshu.com/u/629c1b27e187)
 
-Email：ck19920702@gmail.com
+邮箱：ck19920702@gmail.com
 
 
 
