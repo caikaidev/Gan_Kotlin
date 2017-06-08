@@ -25,7 +25,7 @@ class RecommendAdapter(layoutRes:Int,data:List<Article>) :BaseQuickAdapter<Artic
                 titleTv.visibility = VISIBLE
             }
             else ->{
-                if (article!!.type == getItem((position-1))!!.type) {
+                if (article.type == getItem((position-1))!!.type) {
                     titleTv.visibility = GONE
                 }else{
                     titleTv.visibility = VISIBLE

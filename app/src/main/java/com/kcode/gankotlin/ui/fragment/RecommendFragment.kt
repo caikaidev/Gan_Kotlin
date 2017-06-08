@@ -4,8 +4,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseQuickAdapter
@@ -16,6 +18,7 @@ import com.kcode.gankotlin.common.Type
 import com.kcode.gankotlin.net.Api
 import com.kcode.gankotlin.repository.Article
 import com.kcode.gankotlin.ui.activity.ArticleDetailActivity
+import com.kcode.gankotlin.ui.activity.PhotoActivity
 import com.kcode.gankotlin.ui.adapter.RecommendAdapter
 import com.kcode.gankotlin.utils.toast
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -51,32 +54,41 @@ class RecommendFragment : Fragment() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        welFare.setOnClickListener { _ ->  preview()}
         loadDate()
+    }
+
+    private fun preview() {
+        val intent = Intent(activity, PhotoActivity::class.java)
+        intent.putExtra("url", imageUrl)
+        activity.startActivity(intent)
     }
 
     fun loadDate() {
         val api = Api.Factory.create()
-        api.getDataByDate(date!!)
+        date?.let {
+            api.getDataByDate(it)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe {
                     result ->
-                    setUpView(parseResult(result.string())!!)
+                    setUpView(parseResult(result.string()))
                 }
+        }
 
     }
 
-    fun parseResult(result: String): List<Article>? {
+    fun parseResult(result: String): List<Article> {
+
+        val data: MutableList<Article> = arrayListOf()
         val jsonObject = JSONObject(result)
         val error = jsonObject.getBoolean("error")
         if (error) {
             activity.toast(R.string.load_failed)
-            return null
+            return data
         }
 
         val results = jsonObject.getJSONObject("results")
-        val data: MutableList<Article> = arrayListOf()
-
         val gson = Gson()
         val type = object : TypeToken<List<Article>>() {}.type
         results.keys().forEach {
@@ -90,17 +102,17 @@ class RecommendFragment : Fragment() {
             }
         }
 
-        data.forEach {
-
-        }
-
         return data
     }
 
     fun setUpView(data: List<Article>){
-        Glide.with(activity)
-                .load(imageUrl!!)
-                .into(welFare)
+        if(TextUtils.isEmpty(imageUrl)){
+            welFare.visibility = GONE
+        }else{
+            Glide.with(activity)
+                    .load(imageUrl)
+                    .into(welFare)
+        }
 
         val adapter = RecommendAdapter(R.layout.item_recommend, data)
         recyclerView.layoutManager = LinearLayoutManager(activity)
@@ -108,7 +120,7 @@ class RecommendFragment : Fragment() {
         recyclerView.adapter = adapter
 
         adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener {
-            adapter, view, position -> start2Detail(adapter.getItem(position) as Article)
+            adapter, _, position -> start2Detail(adapter.getItem(position) as Article)
         }
 
     }

@@ -19,14 +19,14 @@ class ArticleAdapter(var context: Context,layoutId:Int) : BaseQuickAdapter<Artic
     val sdf:SimpleDateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
 
     override fun convert(viewHolder: BaseViewHolder?, article: Article?) {
-        viewHolder!!.setText(R.id.title,article!!.desc)
-        viewHolder.setText(R.id.who,article!!.who)
-        viewHolder.setText(R.id.type,article!!.type)
-        viewHolder.setText(R.id.publishedAt,DateUtils.getRelativeTimeSpanString(sdf.parse(article!!.publishedAt).time))
+        viewHolder!!.setText(R.id.title, article!!.desc)
+        viewHolder.setText(R.id.who,article.who)
+        viewHolder.setText(R.id.type,article.type)
+        viewHolder.setText(R.id.publishedAt,DateUtils.getRelativeTimeSpanString(sdf.parse(article.publishedAt).time))
 
         val image: ImageView = viewHolder.getView(R.id.image)
 
-        if (article!!.images == null || article!!.images.size == 0) {
+        if (article.images == null || article.images.size == 0) {
             image.visibility = View.GONE
         }else{
             image.visibility = View.VISIBLE
