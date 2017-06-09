@@ -35,8 +35,11 @@ class PhotoActivity :AppCompatActivity(){
     private fun initToolbar() {
         setSupportActionBar(toolbar)
         val actionBar = supportActionBar
-        actionBar!!.title = ""
-        actionBar.setDisplayHomeAsUpEnabled(true)
+        actionBar?.let {
+            it.title = ""
+            it.setDisplayHomeAsUpEnabled(true)
+        }
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {

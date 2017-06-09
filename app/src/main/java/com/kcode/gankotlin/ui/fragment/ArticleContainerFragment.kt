@@ -84,14 +84,14 @@ class ArticleContainerFragment : Fragment() {
     }
 
     private fun showProgress() {
-        if (activity != null) {
-            activity!!.showProgress()
+        activity?.let {
+            it.showProgress()
         }
     }
 
     private fun dismissProgress() {
-        if (activity != null) {
-            activity!!.dismissProgress()
+        activity?.let {
+            it.dismissProgress()
         }
     }
 
@@ -117,7 +117,10 @@ class ArticleContainerFragment : Fragment() {
             }
 
             override fun onTabSelected(tab: TabLayout.Tab?) {
-                viewPager.setCurrentItem(tab!!.position, false)
+                tab?.let {
+                    viewPager.setCurrentItem(it.position, false)
+                }
+
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {

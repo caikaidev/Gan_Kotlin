@@ -22,7 +22,7 @@ import kotlinx.android.synthetic.main.fragment_base.*
  */
 class WelfareFragment : BaseFragment() {
 
-    var adapter: GirlAdapter? = null
+    private lateinit var adapter: GirlAdapter
 
     companion object {
         fun newInstance(): WelfareFragment {
@@ -41,13 +41,14 @@ class WelfareFragment : BaseFragment() {
         simpleAnimator.supportsChangeAnimations = false
 
         adapter = GirlAdapter(activity!!.applicationContext, R.layout.item_girl)
-        adapter!!.onItemClickListener = BaseQuickAdapter.OnItemClickListener {
-            adapter, view, position -> start2PhotoActivity(adapter.getItem(position) as Article)
+        adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener {
+            adapter, view, position ->
+            start2PhotoActivity(adapter.getItem(position) as Article)
         }
 
         recyclerView.adapter = adapter
 
-        adapter!!.setOnLoadMoreListener({
+        adapter.setOnLoadMoreListener({
             pageNumber++
             isRefresh = false
             loadData(pageSize, pageNumber)
@@ -55,15 +56,16 @@ class WelfareFragment : BaseFragment() {
     }
 
     private fun start2PhotoActivity(article: Article) {
-        val intent = Intent(activity, PhotoActivity::class.java)
-        intent.putExtra("url", article.url)
-        activity!!.startActivity(intent)
+        activity?.let {
+            val intent = Intent(it, PhotoActivity::class.java)
+            intent.putExtra("url", article.url)
+            it.startActivity(intent)
+        }
+
     }
 
     override fun loadError() {
-        if (activity != null) {
-            activity!!.toast(R.string.load_failed)
-        }
+        activity?.let { it.toast(R.string.load_failed) }
     }
 
     override fun loadSuccess(data: List<Article>) {
@@ -72,18 +74,18 @@ class WelfareFragment : BaseFragment() {
 
     private fun setUp(data: List<Article>) {
         if (isRefresh) {
-            adapter!!.setNewData(data)
+            adapter.setNewData(data)
         } else {
-            adapter!!.addData(data)
+            adapter.addData(data)
         }
     }
 
     override fun loadFinish() {
         if (swipeLayout!!.isRefreshing) {
-            swipeLayout!!.isRefreshing = false
+            swipeLayout.isRefreshing = false
         }
 
-        adapter!!.loadMoreComplete()
+        adapter.loadMoreComplete()
     }
 
     override fun getType(): String {
@@ -93,8 +95,10 @@ class WelfareFragment : BaseFragment() {
     class GirlAdapter(var context: Context, layoutId: Int) : BaseQuickAdapter<Article, BaseViewHolder>(layoutId) {
 
         override fun convert(viewHolder: BaseViewHolder?, article: Article?) {
-            val imageView = viewHolder!!.getView<ImageView>(R.id.image)
-            Glide.with(context).load(article!!.url).into(imageView)
+            article?.let {
+                val imageView = viewHolder!!.getView<ImageView>(R.id.image)
+                Glide.with(context).load(it.url).into(imageView)
+            }
         }
 
     }

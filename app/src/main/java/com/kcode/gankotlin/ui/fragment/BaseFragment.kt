@@ -27,6 +27,7 @@ abstract class BaseFragment : Fragment() {
     var isRefresh = false
 
     var activity:Activity? = null
+
     var rootView:View? = null
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {

@@ -57,9 +57,11 @@ class ArticleDetailActivity : AppCompatActivity() {
 
     fun initView() {
         setSupportActionBar(toolbar)
-        supportActionBar!!.title = title
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-
+        val actionBar = supportActionBar
+        actionBar?.let {
+            it.title = title
+            it.setDisplayHomeAsUpEnabled(true)
+        }
 
         webView.settings.javaScriptEnabled = true
         webView.settings.useWideViewPort = true

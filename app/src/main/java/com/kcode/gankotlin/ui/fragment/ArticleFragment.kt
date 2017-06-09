@@ -16,16 +16,15 @@ import kotlinx.android.synthetic.main.fragment_article_list.*
  */
 open abstract class ArticleFragment : BaseFragment() {
 
-    var adapter: ArticleAdapter? = null
-
+    private lateinit var adapter: ArticleAdapter
 
     override fun initRecyclerView() {
         recyclerView.layoutManager = LinearLayoutManager(activity)
         adapter = ArticleAdapter(activity!!.applicationContext, R.layout.item_article)
         recyclerView.adapter = adapter
 
-        adapter!!.setOnLoadMoreListener({ loadMore() }, recyclerView)
-        adapter!!.onItemClickListener = BaseQuickAdapter.OnItemClickListener {
+        adapter.setOnLoadMoreListener({ loadMore() }, recyclerView)
+        adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener {
             adapter, view, position ->
             start2Detail(adapter.data[position] as Article)
         }
@@ -39,8 +38,8 @@ open abstract class ArticleFragment : BaseFragment() {
     }
 
     override fun loadError() {
-        if (activity != null) {
-            activity!!.toast(R.string.load_failed)
+        activity?.let {
+            it.toast(R.string.load_failed)
         }
     }
 
@@ -52,9 +51,9 @@ open abstract class ArticleFragment : BaseFragment() {
         Log.d(TAG, data.toString())
 
         if (isRefresh) {
-            adapter!!.setNewData(data)
+            adapter.setNewData(data)
         } else {
-            adapter!!.addData(data)
+            adapter.addData(data)
         }
     }
 
@@ -64,10 +63,10 @@ open abstract class ArticleFragment : BaseFragment() {
 
     private fun resetStatus() {
         if (swipeLayout!!.isRefreshing) {
-            swipeLayout!!.isRefreshing = false
+            swipeLayout.isRefreshing = false
         }
 
-        adapter!!.loadMoreComplete()
+        adapter.loadMoreComplete()
     }
 
 

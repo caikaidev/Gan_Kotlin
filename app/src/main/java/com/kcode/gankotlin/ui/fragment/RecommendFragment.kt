@@ -65,8 +65,8 @@ class RecommendFragment : Fragment() {
     }
 
     fun loadDate() {
-        val api = Api.Factory.create()
         date?.let {
+            val api = Api.Factory.create()
             api.getDataByDate(it)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
