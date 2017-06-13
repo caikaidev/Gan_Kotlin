@@ -15,6 +15,7 @@ import com.kcode.gankotlin.common.Type
 import com.kcode.gankotlin.repository.Article
 import com.kcode.gankotlin.ui.activity.PhotoActivity
 import com.kcode.gankotlin.utils.toast
+import com.kcode.gankotlin.utils.visible
 import kotlinx.android.synthetic.main.fragment_base.*
 
 /**
@@ -32,7 +33,7 @@ class WelfareFragment : BaseFragment() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        toolbar.visibility = View.VISIBLE
+        toolbar.visible()
     }
 
     override fun initRecyclerView() {

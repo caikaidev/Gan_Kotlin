@@ -7,7 +7,6 @@ import android.support.v7.widget.LinearLayoutManager
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.GONE
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseQuickAdapter
@@ -20,11 +19,13 @@ import com.kcode.gankotlin.repository.Article
 import com.kcode.gankotlin.ui.activity.ArticleDetailActivity
 import com.kcode.gankotlin.ui.activity.PhotoActivity
 import com.kcode.gankotlin.ui.adapter.RecommendAdapter
+import com.kcode.gankotlin.utils.gone
 import com.kcode.gankotlin.utils.toast
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_recommend.*
 import org.json.JSONObject
+import kotlin.properties.Delegates
 
 /**
  * Created by caik on 2017/6/5.
@@ -107,7 +108,7 @@ class RecommendFragment : Fragment() {
 
     fun setUpView(data: List<Article>){
         if(TextUtils.isEmpty(imageUrl)){
-            welFare.visibility = GONE
+            welFare.gone()
         }else{
             Glide.with(activity)
                     .load(imageUrl)

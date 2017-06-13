@@ -1,13 +1,14 @@
 package com.kcode.gankotlin.ui.adapter
 
 import android.text.Html
-import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.TextView
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.kcode.gankotlin.R
 import com.kcode.gankotlin.repository.Article
+import com.kcode.gankotlin.utils.gone
+import com.kcode.gankotlin.utils.visible
 
 /**
  * Created by caik on 2017/6/5.
@@ -22,13 +23,13 @@ class RecommendAdapter(layoutRes:Int,data:List<Article>) :BaseQuickAdapter<Artic
         val position = viewHolder.getLayoutPosition() - this.getHeaderLayoutCount()
         when (position) {
             0 -> {
-                titleTv.visibility = VISIBLE
+                titleTv.visible()
             }
             else ->{
                 if (article.type == getItem((position-1))!!.type) {
-                    titleTv.visibility = GONE
+                    titleTv.gone()
                 }else{
-                    titleTv.visibility = VISIBLE
+                    titleTv.visible()
                 }
             }
         }

@@ -2,13 +2,14 @@ package com.kcode.gankotlin.ui.adapter
 
 import android.content.Context
 import android.text.format.DateUtils
-import android.view.View
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.kcode.gankotlin.R
 import com.kcode.gankotlin.repository.Article
+import com.kcode.gankotlin.utils.gone
+import com.kcode.gankotlin.utils.visible
 import java.text.SimpleDateFormat
 
 /**
@@ -27,9 +28,9 @@ class ArticleAdapter(var context: Context,layoutId:Int) : BaseQuickAdapter<Artic
         val image: ImageView = viewHolder.getView(R.id.image)
 
         if (article.images == null || article.images.size == 0) {
-            image.visibility = View.GONE
+            image.gone()
         }else{
-            image.visibility = View.VISIBLE
+            image.visible()
             val width:Int = context.resources.getDimension(R.dimen.article_image_width).toInt()
             Glide.with(context).load("${article!!.images[0]}?imageView2/0/w/$width").into(image)
         }

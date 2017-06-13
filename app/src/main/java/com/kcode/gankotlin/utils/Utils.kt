@@ -2,6 +2,8 @@ package com.kcode.gankotlin.utils
 
 import android.app.Activity
 import android.support.v7.app.AppCompatActivity
+import android.view.View
+import android.view.View.GONE
 import android.widget.Toast
 import com.kcode.gankotlin.ui.fragment.ProgressFragment
 
@@ -29,6 +31,16 @@ fun AppCompatActivity.dismissProgress() {
 }
 
 /** Activity 拓展 end */
+
+/** View 拓展 start */
+fun View.visible() {
+    visibility = View.VISIBLE
+}
+
+fun View.gone() {
+    visibility = GONE
+}
+/** View 拓展 end */
 
 
 
