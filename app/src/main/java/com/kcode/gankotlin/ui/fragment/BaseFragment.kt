@@ -29,26 +29,27 @@ abstract class BaseFragment : Fragment() {
     var activity:Activity? = null
     var rootView:View? = null
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?): View? {
         if (rootView == null) {
             rootView = inflater!!.inflate(R.layout.fragment_base, container, false)
         }
         return rootView
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         initRecyclerView()
 
-        swipeLayout.setOnRefreshListener({
-            pageNumber = 1
-            isRefresh = true
-            loadData(pageSize,pageNumber)
-        })
+        swipeLayout.setOnRefreshListener {
+          pageNumber = 1
+          isRefresh = true
+          loadData(pageSize,pageNumber)
+        }
 
 
-        loadData(pageSize,pageNumber)
+      loadData(pageSize,pageNumber)
 
     }
 
@@ -67,7 +68,7 @@ abstract class BaseFragment : Fragment() {
                 })
     }
 
-    fun parseResult(result: Result) {
+    private fun parseResult(result: Result) {
         Log.d(TAG, result.toString())
 
         if (result.error) {

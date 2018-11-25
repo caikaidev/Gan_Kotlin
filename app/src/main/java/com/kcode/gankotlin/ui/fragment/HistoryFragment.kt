@@ -29,97 +29,94 @@ import org.jsoup.select.Elements
  */
 class HistoryFragment : Fragment() {
 
-    var activity: MainActivity? = null
+  var activity: MainActivity? = null
 
-    companion object {
-        fun newInstance(): HistoryFragment {
-            return HistoryFragment()
-        }
+  companion object {
+    fun newInstance(): HistoryFragment {
+      return HistoryFragment()
     }
+  }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater!!.inflate(R.layout.fragment_history, container, false)
+  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+      savedInstanceState: Bundle?): View? {
+    return inflater.inflate(R.layout.fragment_history, container, false)
+  }
+
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
+    initRecyclerView()
+    loadPublishedDate()
+  }
+
+  override fun onAttach(activity: Activity?) {
+    super.onAttach(activity)
+    this.activity = activity as MainActivity?
+
+  }
+
+  override fun onDetach() {
+    super.onDetach()
+    activity = null
+  }
+
+  private fun initRecyclerView() {
+    recyclerView.layoutManager = LinearLayoutManager(activity)
+  }
+
+  private fun loadPublishedDate() {
+    showProgress()
+    val api = Api.create()
+    api.getHistory()
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribeOn(Schedulers.io())
+        .subscribe({ result ->
+          setUpRecyclerView(parseHtml(result.string()))
+        }, {}, { dismissProgress() })
+  }
+
+  private fun parseHtml(html: String): List<History> {
+    val doc: Document = Jsoup.parse(html)
+    val typo: Elements = doc.getElementsByClass("typo")
+    var data: MutableList<History> = arrayListOf()
+
+    var history: History
+
+    typo.select("a").listIterator().forEach {
+      history = History(it.attr("href").substring(1), it.text())
+      data.add(history)
     }
+    return data
+  }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        initRecyclerView()
-        loadPublishedDate()
+  private fun setUpRecyclerView(data: List<History>) {
+    val adapter = HistoryAdapter(R.layout.item_history, data)
+    adapter.setOnItemClickListener { adapter, view, position ->
+      val history: History = adapter.getItem(position) as History
+      start2HistoryDetail(history.date)
     }
+    recyclerView.adapter = adapter
+  }
 
-    override fun onAttach(activity: Activity?) {
-        super.onAttach(activity)
-        this.activity = activity as MainActivity?
+  private fun start2HistoryDetail(date: String) {
+    val intent = Intent(activity, HistoryDetailActivity::class.java)
+    intent.putExtra("date", date)
+    startActivity(intent)
+  }
 
+  class HistoryAdapter(layoutId: Int,
+      data: List<History>) : BaseQuickAdapter<History, BaseViewHolder>(layoutId, data) {
+    override fun convert(p0: BaseViewHolder?, p1: History?) {
+      p0!!.setText(R.id.content, "${p1!!.content}(${p1!!.date})")
     }
-
-    override fun onDetach() {
-        super.onDetach()
-        activity = null
-    }
-
-    fun initRecyclerView() {
-        recyclerView.layoutManager = LinearLayoutManager(activity)
-    }
-
-    fun loadPublishedDate() {
-        showProgress()
-        val api = Api.Factory.create()
-        api.getHistory()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe({
-                    result ->
-                    setUpRecyclerView(parseHtml(result.string()))
-                }, {}, { dismissProgress() })
-    }
-
-    private fun parseHtml(html: String): List<History> {
-        val doc: Document = Jsoup.parse(html)
-        val typo: Elements = doc.getElementsByClass("typo")
-        var data: MutableList<History> = arrayListOf()
-
-        var history: History
-
-        typo.select("a").listIterator().forEach {
-            history = History(it.attr("href").substring(1), it.text())
-            data.add(history)
-        }
-        return data
-    }
-
-    fun setUpRecyclerView(data: List<History>) {
-        val adapter: HistoryAdapter = HistoryAdapter(R.layout.item_history, data)
-        adapter.setOnItemClickListener({ adapter, view, position ->
-            val history: History = adapter.getItem(position) as History
-            start2HistoryDetail(history.date)
-        })
-        recyclerView.adapter = adapter
-    }
-
-    private fun start2HistoryDetail(date: String) {
-        val intent: Intent = Intent(activity, HistoryDetailActivity::class.java)
-        intent.putExtra("date", date)
-        activity!!.startActivity(intent)
-    }
-
-    class HistoryAdapter(layoutId: Int, data: List<History>) : BaseQuickAdapter<History, BaseViewHolder>(layoutId, data) {
-        override fun convert(p0: BaseViewHolder?, p1: History?) {
-            p0!!.setText(R.id.content, "${p1!!.content}(${p1!!.date})")
-        }
-    }
+  }
 
 
-    private fun showProgress() {
-        if (activity != null) {
-            activity!!.showProgress()
-        }
-    }
+  private fun showProgress() {
+    activity?.showProgress()
+  }
 
-    private fun dismissProgress() {
-        if (activity != null) {
-            activity!!.dismissProgress()
-        }
-    }
+  private fun dismissProgress() {
+    activity?.dismissProgress()
+  }
 
 }

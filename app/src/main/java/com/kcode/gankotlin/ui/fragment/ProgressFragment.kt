@@ -20,7 +20,8 @@ class ProgressFragment :DialogFragment(){
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?): View? {
         dialog.window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT));
         return ProgressBar(activity)
     }

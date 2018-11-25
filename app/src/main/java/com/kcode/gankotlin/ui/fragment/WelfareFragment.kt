@@ -22,81 +22,80 @@ import kotlinx.android.synthetic.main.fragment_base.*
  */
 class WelfareFragment : BaseFragment() {
 
-    var adapter: GirlAdapter? = null
+  private lateinit var adapter: GirlAdapter
 
-    companion object {
-        fun newInstance(): WelfareFragment {
-            return WelfareFragment()
-        }
+  companion object {
+    fun newInstance(): WelfareFragment {
+      return WelfareFragment()
+    }
+  }
+
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
+    toolbar.visibility = View.VISIBLE
+  }
+
+  override fun initRecyclerView() {
+    recyclerView.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+    val simpleAnimator = recyclerView.itemAnimator as SimpleItemAnimator
+    simpleAnimator.supportsChangeAnimations = false
+
+    adapter = GirlAdapter(activity!!.applicationContext, R.layout.item_girl)
+    adapter.onItemClickListener = BaseQuickAdapter.OnItemClickListener { adapter, view, position ->
+      start2PhotoActivity(adapter.getItem(position) as Article)
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        toolbar.visibility = View.VISIBLE
+    recyclerView.adapter = adapter
+
+    adapter.setOnLoadMoreListener({
+      pageNumber++
+      isRefresh = false
+      loadData(pageSize, pageNumber)
+    }, recyclerView)
+  }
+
+  private fun start2PhotoActivity(article: Article) {
+    val intent = Intent(activity, PhotoActivity::class.java)
+    intent.putExtra("url", article.url)
+    activity!!.startActivity(intent)
+  }
+
+  override fun loadError() {
+    activity?.toast(R.string.load_failed)
+  }
+
+  override fun loadSuccess(data: List<Article>) {
+    setUp(data)
+  }
+
+  private fun setUp(data: List<Article>) {
+    if (isRefresh) {
+      adapter.setNewData(data)
+    } else {
+      adapter.addData(data)
+    }
+  }
+
+  override fun loadFinish() {
+    if (swipeLayout.isRefreshing) {
+      this.swipeLayout.isRefreshing = false
     }
 
-    override fun initRecyclerView() {
-        recyclerView.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-        var simpleAnimator: SimpleItemAnimator = recyclerView.itemAnimator as SimpleItemAnimator
-        simpleAnimator.supportsChangeAnimations = false
+    adapter.loadMoreComplete()
+  }
 
-        adapter = GirlAdapter(activity!!.applicationContext, R.layout.item_girl)
-        adapter!!.onItemClickListener = BaseQuickAdapter.OnItemClickListener {
-            adapter, view, position -> start2PhotoActivity(adapter.getItem(position) as Article)
-        }
+  override fun getType(): String {
+    return Type.福利.name
+  }
 
-        recyclerView.adapter = adapter
+  class GirlAdapter(var context: Context,
+      layoutId: Int) : BaseQuickAdapter<Article, BaseViewHolder>(layoutId) {
 
-        adapter!!.setOnLoadMoreListener({
-            pageNumber++
-            isRefresh = false
-            loadData(pageSize, pageNumber)
-        }, recyclerView)
+    override fun convert(viewHolder: BaseViewHolder?, article: Article?) {
+      val imageView = viewHolder!!.getView<ImageView>(R.id.image)
+      Glide.with(context).load(article!!.url).into(imageView)
     }
 
-    private fun start2PhotoActivity(article: Article) {
-        val intent = Intent(activity, PhotoActivity::class.java)
-        intent.putExtra("url", article.url)
-        activity!!.startActivity(intent)
-    }
-
-    override fun loadError() {
-        if (activity != null) {
-            activity!!.toast(R.string.load_failed)
-        }
-    }
-
-    override fun loadSuccess(data: List<Article>) {
-        setUp(data)
-    }
-
-    private fun setUp(data: List<Article>) {
-        if (isRefresh) {
-            adapter!!.setNewData(data)
-        } else {
-            adapter!!.addData(data)
-        }
-    }
-
-    override fun loadFinish() {
-        if (swipeLayout!!.isRefreshing) {
-            swipeLayout!!.isRefreshing = false
-        }
-
-        adapter!!.loadMoreComplete()
-    }
-
-    override fun getType(): String {
-        return Type.福利.name
-    }
-
-    class GirlAdapter(var context: Context, layoutId: Int) : BaseQuickAdapter<Article, BaseViewHolder>(layoutId) {
-
-        override fun convert(viewHolder: BaseViewHolder?, article: Article?) {
-            val imageView = viewHolder!!.getView<ImageView>(R.id.image)
-            Glide.with(context).load(article!!.url).into(imageView)
-        }
-
-    }
+  }
 
 }

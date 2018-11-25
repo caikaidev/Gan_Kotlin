@@ -1,5 +1,6 @@
 package com.kcode.gankotlin.ui.fragment
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.os.Bundle
 import android.support.design.widget.TabLayout
@@ -26,108 +27,104 @@ import java.util.*
  */
 class ArticleContainerFragment : Fragment() {
 
-    var published:String? = null
-    var activity: MainActivity? = null
+  private var published: String? = null
+  private var activity: MainActivity? = null
 
-    companion object {
-        fun newInstance(): ArticleContainerFragment {
-            return ArticleContainerFragment()
-        }
+  companion object {
+    fun newInstance(): ArticleContainerFragment {
+      return ArticleContainerFragment()
+    }
+  }
+
+  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+      savedInstanceState: Bundle?): View? {
+    return inflater.inflate(R.layout.fragment_article_container, container, false)
+  }
+
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
+    loadPublishedDate()
+  }
+
+  override fun onAttach(activity: Activity?) {
+    super.onAttach(activity)
+    this.activity = activity as MainActivity?
+
+  }
+
+  override fun onDetach() {
+    super.onDetach()
+    activity = null
+  }
+
+  private fun loadPublishedDate() {
+    showProgress()
+    val api = Api.create()
+    api.getPublishedDate()
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribeOn(Schedulers.io())
+        .subscribe({ result ->
+          parseResult(result)
+        }, {}, { onComplete() })
+  }
+
+  private fun parseResult(result: PublishedDate) {
+    if (result.error || result.results.isEmpty()) {
+      published = getCurrentDate()
+      return
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater!!.inflate(R.layout.fragment_article_container, container, false)
-    }
+    published = result.results[0].replace("-", "/")
+  }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        loadPublishedDate()
-    }
+  private fun onComplete() {
 
-    override fun onAttach(activity: Activity?) {
-        super.onAttach(activity)
-        this.activity = activity as MainActivity?
+    dismissProgress()
+    setUpView()
+  }
 
-    }
+  private fun showProgress() {
+    activity?.showProgress()
+  }
 
-    override fun onDetach() {
-        super.onDetach()
-        activity = null
-    }
+  private fun dismissProgress() {
+    activity?.dismissProgress()
+  }
 
-    fun loadPublishedDate() {
+  private fun setUpView() {
+    val fragments = ArrayList<Fragment>()
 
-        showProgress()
-        val api = Api.Factory.create()
-        api.getPublishedDate()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe({
-                    result ->
-                    parseResult(result)
-                }, {}, { onComplete() })
-    }
+    fragments.add(RecommendFragment.newInstance(published!!))
+    fragments.add(AndroidFragment.newInstance())
+    fragments.add(IOSFragment.newInstance())
+    fragments.add(WebFragment.newInstance())
+    fragments.add(VideoFragment.newInstance())
+    fragments.add(ExpandFragment.newInstance())
 
-    private fun parseResult(result: PublishedDate){
-        if (result.error || result.results == null || result.results.size == 0) {
-            published = getCurrentDate()
-            return
-        }
+    val titles = resources.getStringArray(R.array.title)
+    viewPager.adapter = MainAdapter(fragments, titles, childFragmentManager)
+    viewPager.offscreenPageLimit = 6
 
-        published = result.results[0].replace("-","/")
-    }
+    tabLayout.setupWithViewPager(viewPager)
+    tabLayout.tabMode = MODE_SCROLLABLE
 
-    private fun onComplete() {
+    tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+      override fun onTabReselected(tab: TabLayout.Tab?) {
+      }
 
-        dismissProgress()
-        setUpView()
-    }
+      override fun onTabSelected(tab: TabLayout.Tab?) {
+        viewPager.setCurrentItem(tab!!.position, false)
+      }
 
-    private fun showProgress() {
-        if (activity != null) {
-            activity!!.showProgress()
-        }
-    }
+      override fun onTabUnselected(tab: TabLayout.Tab?) {
+      }
+    })
+  }
 
-    private fun dismissProgress() {
-        if (activity != null) {
-            activity!!.dismissProgress()
-        }
-    }
-
-    private fun setUpView() {
-        val fragments = ArrayList<Fragment>()
-
-        fragments.add(RecommendFragment.newInstance(published!!))
-        fragments.add(AndroidFragment.newInstance())
-        fragments.add(IOSFragment.newInstance())
-        fragments.add(WebFragment.newInstance())
-        fragments.add(VideoFragment.newInstance())
-        fragments.add(ExpandFragment.newInstance())
-
-        val titles = resources.getStringArray(R.array.title)
-        viewPager.adapter = MainAdapter(fragments, titles, childFragmentManager)
-        viewPager.offscreenPageLimit = 6
-
-        tabLayout.setupWithViewPager(viewPager)
-        tabLayout.tabMode = MODE_SCROLLABLE
-
-        tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabReselected(tab: TabLayout.Tab?) {
-            }
-
-            override fun onTabSelected(tab: TabLayout.Tab?) {
-                viewPager.setCurrentItem(tab!!.position, false)
-            }
-
-            override fun onTabUnselected(tab: TabLayout.Tab?) {
-            }
-        })
-    }
-
-    fun getCurrentDate(): String {
-        val sdf: SimpleDateFormat = SimpleDateFormat("yyyy/MM/dd")
-        return sdf.format(Date())
-    }
+  @SuppressLint("SimpleDateFormat")
+  fun getCurrentDate(): String {
+    val sdf = SimpleDateFormat("yyyy/MM/dd")
+    return sdf.format(Date())
+  }
 
 }
