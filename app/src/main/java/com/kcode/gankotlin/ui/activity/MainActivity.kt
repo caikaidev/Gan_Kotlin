@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
 
   }
 
-  fun changeTab(position: Int) {
+  private fun changeTab(position: Int) {
 
     if (lastIndex == position) {
       return
